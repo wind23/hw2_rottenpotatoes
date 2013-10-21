@@ -26,16 +26,6 @@ class MoviesController < ApplicationController
                 redirect_to(:action => "index", :sort_by => session[:sort_by])
             end
         end
-    elsif params[:ratings]['G']=='1' and params[:ratings]['PG']=='1' and params[:ratings]['PG-13']=='1' and params[:ratings]['R']=='1'
-        if params[:sort_by] == nil
-            if session[:sort_by] != nil
-                redirect_to(:action => "index", :sort_by => session[:sort_by])
-            else
-                redirect_to(:action => "index")
-            end
-        else
-            redirect_to(:action => "index", :sort_by => params[:sort_by])
-        end
     else
         if params[:sort_by] == nil
             if session[:sort_by] != nil
