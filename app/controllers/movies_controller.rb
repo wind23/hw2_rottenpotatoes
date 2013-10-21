@@ -16,8 +16,8 @@ class MoviesController < ApplicationController
     end
 
     type = params[:sort_by]
-    if params[:ratings] != nil
-        @rat = params[:ratings]
+    if params[:ratings] != nil or session[:ratings] != nil
+        @rat = params[:ratings] || session[:ratings]
     else
         @rat = {'G'=>'1','PG'=>'1','PG-13'=>'1','R'=>'1'}
     end
