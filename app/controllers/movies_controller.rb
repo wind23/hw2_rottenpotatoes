@@ -1,7 +1,5 @@
 class MoviesController < ApplicationController
 
-  
-
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
@@ -10,32 +8,38 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @all_ratings = ['G','PG','PG-13','R']
+    if @all_ratings == nil
+      @all_ratings = ['G','PG','PG-13','R']
+    end
+    if @sort_by!=1 and @sort_by!=2
+      @sort_by = 3
+    end
+
     type = params[:sort_by]
-    if params[:commit] == "Refresh"
-        @movies = []
-        @sort_by = 3
-       	Movie.all.each do |e|
-            if params[:ratings][e.rating]=='1'
-               @movies.push(e)
-            end
-        end
-        
+    if params[:ratings] != nil
+        @rat = params[:ratings]
     else
-       # krue=(:order =>:release_date)
-    #end
-	    if type == "title"
-		@movies = Movie.find(:all, :order => :title)
-		@sort_by = 1
-	    else
-		if type == "release_date"
-		    @movies = Movie.find(:all, :order => :release_date)
-		    @sort_by = 2
-		else
-		    @movies = Movie.find(:all)
-		    @sort_by = 3
-		end
-	    end
+        @rat = {'G'=>'1','PG'=>'1','PG-13'=>'1','R'=>'1'}
+    end
+
+    if type == "title"
+        @sort_by = 1
+    elsif type == "release_date"
+        @sort_by = 2
+    end
+        
+    if @sort_by == 1
+	@moviesx = Movie.find(:all, :order => :title)
+    elsif @sort_by == 2
+        @moviesx = Movie.find(:all, :order => :release_date)
+    else
+        @moviesx = Movie.find(:all)
+    end
+    @movies = []
+    @moviesx.each do |movie|
+       if @rat[movie.rating]=='1'
+          @movies.push(movie)
+       end
     end
   end
 
