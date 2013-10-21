@@ -20,7 +20,7 @@ class MoviesController < ApplicationController
     session[:ratings] = @rat
     session[:sort_by] = type
     if params[:sort_by] != nil or params[:ratings] != nil
-        redirect_to "/movies"
+        redirect_to(:action => "index") 
         return
     end
     if @rat == nil
