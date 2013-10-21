@@ -15,10 +15,9 @@ class MoviesController < ApplicationController
       @sort_by = 3
     end
 
-    type = params[:sort_by]
-    if params[:ratings] != nil or session[:ratings] != nil
-        @rat = params[:ratings] || session[:ratings]
-    else
+    type = params[:sort_by] || session[:sort_by]
+    @rat = params[:ratings] || session[:ratings]
+    if @rat == nil
         @rat = {'G'=>'1','PG'=>'1','PG-13'=>'1','R'=>'1'}
     end
 
@@ -41,6 +40,8 @@ class MoviesController < ApplicationController
           @movies.push(movie)
        end
     end
+    session[:ratings] = @rat
+    session[:sort_by] = type
   end
 
   def 
