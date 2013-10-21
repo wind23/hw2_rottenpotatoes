@@ -19,22 +19,31 @@ class MoviesController < ApplicationController
     @rat = params[:ratings] || session[:ratings]
     session[:ratings] = @rat
     session[:sort_by] = type
-    if session[:sort_by] != params[:sort_by] or session[:ratings] != params[:ratings]
-        if session[:sort_by] == nil
-            if session[:ratings] == {'G'=>'1','PG'=>'1','PG-13'=>'1','R'=>'1'} and params[:ratings] != nil
-                redirect_to(:action => "index")
-            else
-                redirect_to(:action => "index", :ratings => session[:ratings])
-            end 
-        else
-            if session[:ratings] == {'G'=>'1','PG'=>'1','PG-13'=>'1','R'=>'1'} and params[:ratings] != nil
+
+    if params[:ratings] == nil
+        if params[:sort_by] == nil
+            if session[:sort_by] != nil
+                redirect_to(:action => "index", :sort_by => session[:sort_by])
+            end
+        end
+    elsif params[:ratings]['G']=='1' and params[:ratings]['PG']=='1' and params[:ratings]['PG-13']=='1' and params[:ratings]['R']=='1'
+        if params[:sort_by] == nil
+            if session[:sort_by] != nil
                 redirect_to(:action => "index", :sort_by => session[:sort_by])
             else
-                redirect_to(:action => "index", :ratings => session[:ratings], :sort_by => session[:sort_by])
+                redirect_to(:action => "index")
             end
-        end 
-    return
+        else
+            redirect_to(:action => "index", :sort_by => params[:sort_by])
+        end
+    else
+        if params[:sort_by] == nil
+            if session[:sort_by] != nil
+                redirect_to(:action => "index", :sort_by => session[:sort_by], :ratings => params[:ratings])
+            end
+        end
     end
+  
     if @rat == nil
         @rat = {'G'=>'1','PG'=>'1','PG-13'=>'1','R'=>'1'}
     end
